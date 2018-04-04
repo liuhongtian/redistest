@@ -2,7 +2,7 @@ package net.lht.redis;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class RedistestApplication implements CommandLineRunner {
 		ExecutorService pool = Executors.newFixedThreadPool(4);
 		List<Future<Long>> threadResult = new ArrayList<>();
 
-		IntStream.range(0, 1000000).forEach(n -> threadResult.add(pool.submit(() -> tester.test())));
+		LongStream.range(0L, 1000000L).forEach(n -> threadResult.add(pool.submit(() -> tester.test())));
 
 		sum = threadResult.stream().map(n -> {
 			try {
