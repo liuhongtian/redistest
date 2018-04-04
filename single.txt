@@ -1,0 +1,43 @@
+package net.lht.redis;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import net.lht.redis.service.Tester;
+
+@SpringBootApplication
+public class RedistestApplication implements CommandLineRunner {
+
+	@Autowired
+	Tester tester;
+
+	public static void main(String[] args) {
+		SpringApplication.run(RedistestApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		long sum = 0L;
+
+		LocalDateTime begin = LocalDateTime.now();
+
+		tester.reset();
+
+		for (int i = 0; i < 1000000; i++) {
+			sum += tester.test();
+		}
+
+		LocalDateTime finish = LocalDateTime.now();
+
+		long time = finish.toEpochSecond(ZoneOffset.UTC) - begin.toEpochSecond(ZoneOffset.UTC);
+
+		System.out.println(
+				"after " + time + " seconds, single thread finish at: " + tester.getResult() + ", and sum = " + sum);
+	}
+
+}
